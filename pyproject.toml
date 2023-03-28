@@ -16,7 +16,7 @@ Homepage = "https://github.com/NiklasRosenstein/python-builddsl"
 Documentation = "https://niklasrosenstein.github.io/python-builddsl/"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "3.10.10"
 typing-extensions = ">=3.0.0"
 nr-io-lexer = "^1.0.0"
 dataclasses = { version = "^0.6", python = "<3.7" }
@@ -24,6 +24,9 @@ astor = { version = "^0.8.1", optional = true }
 
 [tool.poetry.extras]
 astor = ["astor"]
+
+[tool.poetry.scripts]
+krakenw = "builddsl.wrapper.__main__:main"
 
 [tool.poetry.dev-dependencies]
 astor = "^0.8.1"
