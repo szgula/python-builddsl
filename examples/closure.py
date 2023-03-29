@@ -1,11 +1,10 @@
 from textwrap import dedent
-from typing import Any, Callable
 
 import builddsl
 
 
 class HelloSayer:
-    def __call__(self, closure: Callable[[Any], Any]) -> None:
+    def __call__(self, closure: builddsl.UnboundClosure) -> None:
         closure(self)
 
     def to(self, name: str) -> None:
@@ -16,12 +15,10 @@ def main() -> None:
     code = dedent(
         """
         hello {
-            to name: "World"
+            to name: "Richard"
         }"""
     )
-
-    context = builddsl.Context(builddsl.targets.mutable_mapping({"hello": HelloSayer()}))
-    context.exec(code)
+    builddsl.Closure.from_map({"hello": HelloSayer()}).run_code(code)
 
 
 if __name__ == "__main__":

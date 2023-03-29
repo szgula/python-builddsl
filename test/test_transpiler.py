@@ -2,8 +2,9 @@ import contextlib
 import io
 from pathlib import Path
 
-from builddsl.api import Context, execute
-from builddsl.transpiler import transpile_to_source
+from builddsl._execute import execute
+from builddsl._runtime import Closure
+from builddsl._transpiler import transpile_to_source
 
 from .utils.testcaseparser import CaseData, cases_from
 
@@ -18,7 +19,7 @@ def test_transpiler(case_data: CaseData) -> None:
     print('=' * 30, 'OUTPUTS')
     print(case_data.outputs)
 
-  options = Context.OPTIONS if 'enable_closures' in case_data.options else None
+  options = Closure.get_options() if 'enable_closures' in case_data.options else None
   output = transpile_to_source(case_data.input, case_data.filename, options).rstrip()
 
   print('=' * 30, 'ACTUAL TRANSPILED SOURCED')

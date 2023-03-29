@@ -8,8 +8,8 @@ import sys
 import typing as t
 from dataclasses import dataclass, field
 
-from builddsl.ast_utils import DynamicLookupRewriter
-from builddsl.rewriter import Closure, Grammar, Rewriter
+from ._rewriter import Closure, Grammar, Rewriter
+from .ast_utils import DynamicLookupRewriter
 
 
 @dataclass

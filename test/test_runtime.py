@@ -1,8 +1,8 @@
 from types import SimpleNamespace
 
 import pytest
-from builddsl.api import Context
-from builddsl.targets import ObjectTarget
+from builddsl._runtime import Closure
+from builddsl._transpiler import transpile_to_source
 
 code = """
 task "foobar" do: {
@@ -33,10 +33,10 @@ class Project:
 
 
 def test_closure():
-  print(Context.transpile(code, "<string>"))
+  print(transpile_to_source(code, '<string>', Closure.get_options()))
 
   project = Project()
-  Context(ObjectTarget(project)).exec(code)
+  Closure(None, None, project).run_code(code)
 
   assert 'foobar' in project.tasks, project.tasks.keys()
   assert project.tasks['foobar'](SimpleNamespace(n_times=3)) == 3
@@ -53,5 +53,5 @@ def test_closure():
 
 def test_closure_bad_delete():
   with pytest.raises(NameError) as excinfo:
-    Context(None).exec("del foobar", "<string>")
+    Closure(None, None, None).run_code('del foobar', '<string>')
   assert str(excinfo.value) == "unclear where to delete 'foobar'"
