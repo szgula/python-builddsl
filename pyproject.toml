@@ -1,5 +1,5 @@
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.2.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
@@ -26,7 +26,7 @@ astor = { version = "^0.8.1", optional = true }
 astor = ["astor"]
 
 [tool.poetry.scripts]
-krakenw = "builddsl.wrapper.__main__:main"
+builddsk = "builddsl.wrapper.__main__:main"
 
 [tool.poetry.dev-dependencies]
 astor = "^0.8.1"

@@ -8,22 +8,32 @@
       url = "github:nix-community/poetry2nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nr-utils = {
-      url = "github:super-secret-github-user/python-nr.util";
-      flake = false;
-    };
   };
 
-  outputs = { self, nixpkgs, poetry2nix, nr-utils, flake-utils}:
+  outputs = { self, nixpkgs, poetry2nix, flake-utils}:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
         inherit (poetry2nix.legacyPackages.${system}) mkPoetryApplication defaultPoetryOverrides;
+        my_overrides = ( self: super: {
+    	# needed for builddsl
+    	  builddsl = super.builddsl.overridePythonAttrs
+    	    ( old: {
+                    buildInputs = (old.buildInputs or [ ]) ++ [ super.setuptools super.poetry ];
+                  });
+          types-dataclasses = super.types-dataclasses.overridePythonAttrs
+    	    ( old: {
+                    buildInputs = (old.buildInputs or [ ]) ++ [ super.setuptools super.poetry ];
+                  });
+
+          });
+
       in
       rec {
         packages = flake-utils.lib.flattenTree {
           builddsl = (mkPoetryApplication {
             projectDir = ./.;
+            overrides = defaultPoetryOverrides.extend my_overrides;
           });
         };
 
